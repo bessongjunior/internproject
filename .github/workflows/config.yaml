@@ -27,7 +27,7 @@ jobs:
 
     - name: Test the application
       run: |
-        npm install
+        npm install --force
         npm run test
 
     - name: Scan the application
