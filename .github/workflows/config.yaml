@@ -1,0 +1,54 @@
+name: Deploy Application Frontend
+
+on:
+  push:
+    branches: [ master ]
+  # pull_request:
+  #   branches: [ dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deploy frontend
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14.17.0'
+
+    - name: Install dependencies
+      run: |
+        node -v
+        npm i
+
+    - name: Build the app
+      run: |
+        npm install
+        npm run build
+
+    - name: Test the app
+      run: |
+        npm install
+        npm run test
+
+    - name: Scan the app
+      run: |
+        npm install
+        npm audit fix --audit-level=critical
+
+
+    - name: Deploy the app
+      # env: |
+      #  VERCEL_ORG_ID: LeHOU860l9RTYo677fUgbkYev
+      #  VERCEL_PROJECT_ID: prj_Llo677fUY35V90H8iuVw0c346vHr4r
+      run: |
+        npm install
+        npm install vercel 
+        npm run build 
+        cd build
+        mkdir .vercel
+        touch project.json
+        echo '{"orgId":"${{ env.VERCEL_ORG_ID }}","projectId":"${{ env.VERCEL_PROJECT_ID }}"}' > project.json
+        npm run deploy
+
+    
